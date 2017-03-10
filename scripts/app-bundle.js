@@ -53,17 +53,7 @@ define('main',['exports', './environment', 'i18next-xhr-backend'], function (exp
   });
 
   function configure(aurelia) {
-    aurelia.use.standardConfiguration().feature('resources');
-
-    if (_environment2.default.debug) {
-      aurelia.use.developmentLogging();
-    }
-
-    if (_environment2.default.testing) {
-      aurelia.use.plugin('aurelia-testing');
-    }
-
-    aurelia.use.plugin('aurelia-i18n', function (instance) {
+    aurelia.use.standardConfiguration().plugin('aurelia-i18n', function (instance) {
       window.i18n = instance;
 
       instance.i18next.use(_i18nextXhrBackend2.default);
@@ -72,11 +62,19 @@ define('main',['exports', './environment', 'i18next-xhr-backend'], function (exp
         backend: {
           loadPath: './locales/{{lng}}/{{ns}}.json' },
         lng: 'es',
-        attributes: ['t', 'i18n'],
+        attributes: ['t', 'i18n', 'test'],
         fallbackLng: 'en',
         debug: true
       });
-    });
+    }).feature('resources');
+
+    if (_environment2.default.debug) {
+      aurelia.use.developmentLogging();
+    }
+
+    if (_environment2.default.testing) {
+      aurelia.use.plugin('aurelia-testing');
+    }
 
     aurelia.start().then(function () {
       return aurelia.setRoot();
@@ -94,12 +92,13 @@ define('resources/index',['exports'], function (exports) {
     config.globalResources(['resources/elements/test']);
   }
 });
-define('resources/elements/test',["exports"], function (exports) {
-  "use strict";
+define('resources/elements/test',['exports', 'aurelia-framework'], function (exports, _aureliaFramework) {
+  'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.Test = undefined;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -107,10 +106,12 @@ define('resources/elements/test',["exports"], function (exports) {
     }
   }
 
-  var Test = exports.Test = function Test() {
+  var _dec, _dec2, _class;
+
+  var Test = exports.Test = (_dec = (0, _aureliaFramework.inject)(), _dec2 = (0, _aureliaFramework.customElement)('test'), _dec(_class = _dec2(_class = function Test() {
     _classCallCheck(this, Test);
-  };
+  }) || _class) || _class);
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template><h1>Home</h1><span i18n=\"I18N_Test.i\">Hello</span><br><span t=\"T_Test.t\">Hello T</span><hr><test></test></template>"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template><h1>Home</h1><hr><test></test></template>"; });
 define('text!resources/elements/test.html', ['module'], function(module) { module.exports = "<template><h2>Test Element</h2><span i18n=\"I18N_Test.i\">Hello</span><br><span t=\"T_Test.t\">Hello T</span></template>"; });
 //# sourceMappingURL=app-bundle.js.map
